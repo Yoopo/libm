@@ -47,8 +47,8 @@ pub fn fmaf(x: f32, y: f32, mut z: f32) -> f32 {
     let mut ui: u64;
     let e: i32;
 
-    xy = x as f64 * y as f64;
-    result = xy + z as f64;
+    xy = f64::from(x) * f64::from(y);
+    result = xy + f64::from(z);
     ui = result.to_bits();
     e = (ui >> 52) as i32 & 0x7ff;
     /* Common case: The double precision result is fine. */
@@ -58,7 +58,7 @@ pub fn fmaf(x: f32, y: f32, mut z: f32) -> f32 {
         /* NaN */
         e == 0x7ff ||
         /* exact */
-        (result - xy == z as f64 && result - z as f64 == xy) ||
+        (result - xy == f64::from(z) && result - f64::from(z) == xy) ||
         /* not round-to-nearest */
         fegetround() != FE_TONEAREST
     {
@@ -70,7 +70,7 @@ pub fn fmaf(x: f32, y: f32, mut z: f32) -> f32 {
             feclearexcept(FE_INEXACT);
             // prevent `xy + vz` from being CSE'd with `xy + z` above
             let vz: f32 = unsafe { read_volatile(&z) };
-            result = xy + vz as f64;
+            result = xy + f64::from(vz);
             if fetestexcept(FE_INEXACT) != 0 {
                 feraiseexcept(FE_UNDERFLOW);
             } else {
@@ -88,7 +88,7 @@ pub fn fmaf(x: f32, y: f32, mut z: f32) -> f32 {
     fesetround(FE_TOWARDZERO);
     // prevent `vxy + z` from being CSE'd with `xy + z` above
     let vxy: f64 = unsafe { read_volatile(&xy) };
-    let mut adjusted_result: f64 = vxy + z as f64;
+    let mut adjusted_result: f64 = vxy + f64::from(z);
     fesetround(FE_TONEAREST);
     if result == adjusted_result {
         ui = adjusted_result.to_bits();

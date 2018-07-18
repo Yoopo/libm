@@ -257,13 +257,13 @@ pub fn rem_pio2_large(x: &[f64], y: &mut [f64], e0: i32, prec: usize) -> i32 {
     /* set up f[0] to f[jx+jk] where f[jx+jk] = ipio2[jv+jk] */
     let mut j = (jv - jx) as i32;
     let m = jx + jk;
-    for i in 0..=m {
-        i!(f, i, =, if j < 0 {
+    for f_i in f.iter_mut().take(m + 1) {
+        *f_i = if j < 0 {
             0.
         } else {
-            i!(IPIO2, j as usize) as f64
-        });
-        j += 1;
+            f64::from(i!(IPIO2, j as usize))
+        };
+        j += 1
     }
 
     /* compute q[0],q[1],...q[jk] */
@@ -282,7 +282,7 @@ pub fn rem_pio2_large(x: &[f64], y: &mut [f64], e0: i32, prec: usize) -> i32 {
         let mut i = 0i32;
         z = i!(q, jz);
         for j in (1..=jz).rev() {
-            fw = (x1p_24 * z) as i32 as f64;
+            fw = f64::from((x1p_24 * z) as i32);
             i!(iq, i as usize, =, (z - x1p24 * fw) as i32);
             z = i!(q, j - 1) + fw;
             i += 1;
@@ -292,7 +292,7 @@ pub fn rem_pio2_large(x: &[f64], y: &mut [f64], e0: i32, prec: usize) -> i32 {
         z = scalbn(z, q0); /* actual value of z */
         z -= 8.0 * floor(z * 0.125); /* trim off integer >= 8 */
         n = z as i32;
-        z -= n as f64;
+        z -= f64::from(n);
         ih = 0;
         if q0 > 0 {
             /* need iq[jz-1] to determine n */
@@ -310,18 +310,19 @@ pub fn rem_pio2_large(x: &[f64], y: &mut [f64], e0: i32, prec: usize) -> i32 {
             /* q > 0.5 */
             n += 1;
             let mut carry = 0i32;
-            for i in 0..jz {
+            for iq_i in iq.iter_mut().take(jz) {
                 /* compute 1-q */
-                let j = i!(iq, i);
+                let j = *iq_i;
                 if carry == 0 {
                     if j != 0 {
                         carry = 1;
-                        i!(iq, i, =, 0x1000000 - j);
+                        *iq_i = 0x1000000 - j;
                     }
                 } else {
-                    i!(iq, i, =, 0xffffff - j);
+                    *iq_i = 0xffffff - j;
                 }
             }
+
             if q0 > 0 {
                 /* rare case: chance is 1 in 12 */
                 match q0 {
@@ -345,7 +346,7 @@ pub fn rem_pio2_large(x: &[f64], y: &mut [f64], e0: i32, prec: usize) -> i32 {
         /* check if recomputation is needed */
         if z == 0. {
             let mut j = 0;
-            for i in (jk..=jz - 1).rev() {
+            for i in (jk..jz).rev() {
                 j |= i!(iq, i);
             }
             if j == 0 {
@@ -357,7 +358,7 @@ pub fn rem_pio2_large(x: &[f64], y: &mut [f64], e0: i32, prec: usize) -> i32 {
 
                 for i in (jz + 1)..=(jz + k) {
                     /* add q[jz+1] to q[jz+k] */
-                    i!(f, jx + i, =, i!(IPIO2, jv + i) as f64);
+                    i!(f, jx + i, =, f64::from(i!(IPIO2, jv + i)));
                     fw = 0f64;
                     for j in 0..=jx {
                         fw += i!(x, j) * i!(f, jx + i - j);
@@ -384,7 +385,7 @@ pub fn rem_pio2_large(x: &[f64], y: &mut [f64], e0: i32, prec: usize) -> i32 {
         /* break z into 24-bit if necessary */
         z = scalbn(z, -q0);
         if z >= x1p24 {
-            fw = (x1p_24 * z) as i32 as f64;
+            fw = f64::from((x1p_24 * z) as i32);
             i!(iq, jz, =, (z - x1p24 * fw) as i32);
             jz += 1;
             q0 += 24;
@@ -397,7 +398,7 @@ pub fn rem_pio2_large(x: &[f64], y: &mut [f64], e0: i32, prec: usize) -> i32 {
     /* convert integer "bit" chunk to floating-point value */
     fw = scalbn(1., q0);
     for i in (0..=jz).rev() {
-        i!(q, i, =, fw * (i!(iq, i) as f64));
+        i!(q, i, =, fw * (f64::from(i!(iq, i))));
         fw *= x1p_24;
     }
 
@@ -427,12 +428,16 @@ pub fn rem_pio2_large(x: &[f64], y: &mut [f64], e0: i32, prec: usize) -> i32 {
                 fw += i!(fq, i);
             }
             // TODO: drop excess precision here once double_t is used
-            fw = fw as f64;
+            //fw = f64::from(fw); DONE?
             i!(y, 0, =, if ih == 0 { fw } else { -fw });
             fw = i!(fq, 0) - fw;
-            for i in 1..=jz {
-                fw += i!(fq, i);
-            }
+            let fq_sum: f64 = fq.iter().take(jz + 1).skip(1).sum();
+            fw += fq_sum;
+            // TODO: check performance against
+            //for i in 1..=jz {
+            //    fw += i!(fq, i);
+            //}
+
             i!(y, 1, =, if ih == 0 { fw } else { -fw });
         }
         3 => {

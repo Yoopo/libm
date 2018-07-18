@@ -74,7 +74,7 @@ pub fn log2(mut x: f64) -> f64 {
     hx += 0x3ff00000 - 0x3fe6a09e;
     k += (hx >> 20) as i32 - 0x3ff;
     hx = (hx & 0x000fffff) + 0x3fe6a09e;
-    ui = (hx as u64) << 32 | (ui & 0xffffffff);
+    ui = (u64::from(hx)) << 32 | (ui & 0xffffffff);
     x = f64::from_bits(ui);
 
     f = x - 1.0;
@@ -102,5 +102,5 @@ pub fn log2(mut x: f64) -> f64 {
     val_lo += (y - w) + val_hi;
     val_hi = w;
 
-    return val_lo + val_hi;
+    val_lo + val_hi
 }

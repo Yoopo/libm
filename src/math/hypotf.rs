@@ -39,5 +39,7 @@ pub fn hypotf(mut x: f32, mut y: f32) -> f32 {
         x *= x1p90;
         y *= x1p90;
     }
-    z * sqrtf((x as f64 * x as f64 + y as f64 * y as f64) as f32)
+    let x_64 = f64::from(x);
+    let y_64 = f64::from(y);
+    z * sqrtf((x_64 * x_64 + y_64 * y_64) as f32)
 }

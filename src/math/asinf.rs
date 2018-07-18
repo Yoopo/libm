@@ -42,7 +42,7 @@ pub fn asinf(mut x: f32) -> f32 {
         /* |x| >= 1 */
         if ix == 0x3f800000 {
             /* |x| == 1 */
-            return ((x as f64) * PIO2 + x1p_120) as f32; /* asin(+-1) = +-pi/2 with inexact */
+            return ((f64::from(x)) * PIO2 + x1p_120) as f32; /* asin(+-1) = +-pi/2 with inexact */
         }
         return 0. / (x - x); /* asin(|x|>1) is NaN */
     }
@@ -58,8 +58,8 @@ pub fn asinf(mut x: f32) -> f32 {
 
     /* 1 > |x| >= 0.5 */
     let z = (1. - fabsf(x)) * 0.5;
-    let s = sqrt(z as f64);
-    x = (PIO2 - 2. * (s + s * (r(z) as f64))) as f32;
+    let s = sqrt(f64::from(z));
+    x = (PIO2 - 2. * (s + s * f64::from(r(z)))) as f32;
     if (hx >> 31) != 0 {
         -x
     } else {

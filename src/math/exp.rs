@@ -124,8 +124,8 @@ pub fn exp(mut x: f64) -> f64 {
         } else {
             k = 1 - sign - sign;
         }
-        hi = x - k as f64 * LN2HI; /* k*ln2hi is exact here */
-        lo = k as f64 * LN2LO;
+        hi = x - f64::from(k) * LN2HI; /* k*ln2hi is exact here */
+        lo = f64::from(k) * LN2LO;
         x = hi - lo;
     } else if hx > 0x3e300000 {
         /* if |x| > 2**-28 */

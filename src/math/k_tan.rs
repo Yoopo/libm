@@ -85,7 +85,7 @@ pub fn k_tan(mut x: f64, mut y: f64, odd: i32) -> f64 {
     let w = x + r;
     if big {
         let sign = hx >> 31;
-        let s = 1.0 - 2.0 * odd as f64;
+        let s = 1.0 - 2.0 * f64::from(odd);
         let v = s - 2.0 * (x + (r - w * w / (w + s)));
         return if sign != 0 { -v } else { v };
     }

@@ -116,15 +116,17 @@ pub fn exp2f(mut x: f32) -> f32 {
     let mut i0 = ui;
     i0 += TBLSIZE as u32 / 2;
     let k = i0 / TBLSIZE as u32;
-    let ukf = f64::from_bits(((0x3ff + k) as u64) << 52);
+    let ukf = f64::from_bits(u64::from(0x3ff + k) << 52);
     i0 &= TBLSIZE as u32 - 1;
     let mut uf = f32::from_bits(ui);
     uf -= redux;
-    let z: f64 = (x - uf) as f64;
+    let z: f64 = f64::from(x - uf);
     /* Compute r = exp2(y) = exp2ft[i0] * p(z). */
     let r: f64 = f64::from_bits(EXP2FT[i0 as usize]);
-    let t: f64 = r as f64 * z;
-    let r: f64 = r + t * (p1 as f64 + z * p2 as f64) + t * (z * z) * (p3 as f64 + z * p4 as f64);
+    let t: f64 = r * z;
+    let r: f64 = r
+        + t * (f64::from(p1) + z * f64::from(p2))
+        + t * (z * z) * (f64::from(p3) + z * f64::from(p4));
 
     /* Scale by 2**k */
     (r * ukf) as f32

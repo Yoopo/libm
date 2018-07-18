@@ -114,7 +114,7 @@ pub fn expm1f(mut x: f32) -> f32 {
         if k == 128 {
             y = y * 2. * x1p127;
         } else {
-            y = y * twopk;
+            y *= twopk;
         }
         return y - 1.;
     }

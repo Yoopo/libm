@@ -101,7 +101,7 @@ pub fn log(mut x: f64) -> f64 {
     hx += 0x3ff00000 - 0x3fe6a09e;
     k += ((hx >> 20) as i32) - 0x3ff;
     hx = (hx & 0x000fffff) + 0x3fe6a09e;
-    ui = ((hx as u64) << 32) | (ui & 0xffffffff);
+    ui = (u64::from(hx) << 32) | (ui & 0xffffffff);
     x = f64::from_bits(ui);
 
     let f: f64 = x - 1.0;
@@ -112,6 +112,6 @@ pub fn log(mut x: f64) -> f64 {
     let t1: f64 = w * (LG2 + w * (LG4 + w * LG6));
     let t2: f64 = z * (LG1 + w * (LG3 + w * (LG5 + w * LG7)));
     let r: f64 = t2 + t1;
-    let dk: f64 = k as f64;
-    return s * (hfsq + r) + dk * LN2_LO - hfsq + f + dk * LN2_HI;
+    let dk: f64 = f64::from(k);
+    s * (hfsq + r) + dk * LN2_LO - hfsq + f + dk * LN2_HI
 }

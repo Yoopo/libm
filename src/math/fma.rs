@@ -35,9 +35,9 @@ fn mul(x: u64, y: u64) -> (u64, u64) {
     let t1: u64;
     let t2: u64;
     let t3: u64;
-    let xlo: u64 = x as u32 as u64;
+    let xlo: u64 = u64::from(x as u32);
     let xhi: u64 = x >> 32;
-    let ylo: u64 = y as u32 as u64;
+    let ylo: u64 = u64::from(y as u32);
     let yhi: u64 = y >> 32;
 
     t1 = xlo * ylo;
@@ -82,7 +82,7 @@ pub fn fma(x: f64, y: f64, z: f64) -> f64 {
     if d > 0 {
         if d < 64 {
             zlo = nz.m << d;
-            zhi = nz.m >> 64 - d;
+            zhi = nz.m >> (64 - d);
         } else {
             zlo = 0;
             zhi = nz.m;
@@ -90,8 +90,8 @@ pub fn fma(x: f64, y: f64, z: f64) -> f64 {
             d -= 64;
             if d == 0 {
             } else if d < 64 {
-                rlo = rhi << 64 - d | rlo >> d | ((rlo << 64 - d) != 0) as u64;
-                rhi = rhi >> d;
+                rlo = rhi << (64 - d) | rlo >> d | ((rlo << (64 - d)) != 0) as u64;
+                rhi >>= d;
             } else {
                 rlo = 1;
                 rhi = 0;
@@ -103,7 +103,7 @@ pub fn fma(x: f64, y: f64, z: f64) -> f64 {
         if d == 0 {
             zlo = nz.m;
         } else if d < 64 {
-            zlo = nz.m >> d | ((nz.m << 64 - d) != 0) as u64;
+            zlo = nz.m >> d | ((nz.m << (64 - d)) != 0) as u64;
         } else {
             zlo = 1;
         }
@@ -135,7 +135,7 @@ pub fn fma(x: f64, y: f64, z: f64) -> f64 {
         e += 64;
         d = rhi.leading_zeros() as i32 - 1;
         /* note: d > 0 */
-        rhi = rhi << d | rlo >> 64 - d | ((rlo << d) != 0) as u64;
+        rhi = rhi << d | rlo >> (64 - d) | ((rlo << d) != 0) as u64;
     } else if rlo != 0 {
         d = rlo.leading_zeros() as i32 - 1;
         if d < 0 {
@@ -154,6 +154,7 @@ pub fn fma(x: f64, y: f64, z: f64) -> f64 {
     if sign != 0 {
         i = -i;
     }
+    // FIXME: i64 to f64
     let mut r: f64 = i as f64; /* |r| is in [0x1p62,0x1p63] */
 
     if e < -1022 - 62 {
@@ -167,8 +168,8 @@ pub fn fma(x: f64, y: f64, z: f64) -> f64 {
                 /* min normal after rounding, underflow depends
                    on arch behaviour which can be imitated by
                    a double to float conversion */
-                let fltmin: f32 = (x0_ffffff8p_63 * f32::MIN_POSITIVE as f64 * r) as f32;
-                return f64::MIN_POSITIVE / f32::MIN_POSITIVE as f64 * fltmin as f64;
+                let fltmin: f32 = (x0_ffffff8p_63 * f64::from(f32::MIN_POSITIVE) * r) as f32;
+                return f64::MIN_POSITIVE / f64::from(f32::MIN_POSITIVE) * f64::from(fltmin);
             }
             /* one bit is lost when scaled, add another top bit to
                only round once at conversion if it is inexact */
@@ -177,23 +178,25 @@ pub fn fma(x: f64, y: f64, z: f64) -> f64 {
                 if sign != 0 {
                     i = -i;
                 }
+                // FIXME: i64 to f64
                 r = i as f64;
                 r = 2. * r - c; /* remove top bit */
 
                 /* raise underflow portably, such that it
                    cannot be optimized away */
                 {
-                    let tiny: f64 = f64::MIN_POSITIVE / f32::MIN_POSITIVE as f64 * r;
+                    let tiny: f64 = f64::MIN_POSITIVE / f64::from(f32::MIN_POSITIVE) * r;
                     r += (tiny * tiny) * (r - r);
                 }
             }
         } else {
             /* only round once when scaled */
             d = 10;
-            i = ((rhi >> d | ((rhi << 64 - d) != 0) as u64) << d) as i64;
+            i = ((rhi >> d | ((rhi << (64 - d)) != 0) as u64) << d) as i64;
             if sign != 0 {
                 i = -i;
             }
+            // FIXME: i64 to f64
             r = i as f64;
         }
     }

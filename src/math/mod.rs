@@ -235,20 +235,20 @@ fn get_low_word(x: f64) -> u32 {
 #[inline]
 fn with_set_high_word(f: f64, hi: u32) -> f64 {
     let mut tmp = f.to_bits();
-    tmp &= 0x00000000_ffffffff;
-    tmp |= (hi as u64) << 32;
+    tmp &= 0x0000_0000_ffff_ffff;
+    tmp |= u64::from(hi) << 32;
     f64::from_bits(tmp)
 }
 
 #[inline]
 fn with_set_low_word(f: f64, lo: u32) -> f64 {
     let mut tmp = f.to_bits();
-    tmp &= 0xffffffff_00000000;
-    tmp |= lo as u64;
+    tmp &= 0xffff_ffff_0000_0000;
+    tmp |= u64::from(lo);
     f64::from_bits(tmp)
 }
 
 #[inline]
 fn combine_words(hi: u32, lo: u32) -> f64 {
-    f64::from_bits((hi as u64) << 32 | lo as u64)
+    f64::from_bits(u64::from(hi) << 32 | u64::from(lo))
 }

@@ -146,13 +146,13 @@ pub fn sqrt(x: f64) -> f64 {
     ix0 = (ix0 & 0x000fffff) | 0x00100000;
     if (m & 1) == 1 {
         /* odd m, double x to make it even */
-        ix0 += ix0 + ((ix1 & sign) >> 31) as i32;
+        ix0 = ix0 + ix0 + ((ix1 & sign) >> 31) as i32;
         ix1 += ix1;
     }
     m >>= 1; /* m = [m/2] */
 
     /* generate sqrt(x) bit by bit */
-    ix0 += ix0 + ((ix1 & sign) >> 31) as i32;
+    ix0 = ix0 + ix0 + ((ix1 & sign) >> 31) as i32;
     ix1 += ix1;
     q = 0; /* [q,q1] = sqrt(x) */
     q1 = 0;
@@ -167,7 +167,7 @@ pub fn sqrt(x: f64) -> f64 {
             ix0 -= t;
             q += r as i32;
         }
-        ix0 += ix0 + ((ix1 & sign) >> 31) as i32;
+        ix0 = ix0 + ix0 + ((ix1 & sign) >> 31) as i32;
         ix1 += ix1;
         r >>= 1;
     }
@@ -188,7 +188,8 @@ pub fn sqrt(x: f64) -> f64 {
             ix1 -= t1;
             q1 += r;
         }
-        ix0 += ix0 + ((ix1 & sign) >> 31) as i32;
+
+        ix0 = ix0 + ix0 + ((ix1 & sign) >> 31) as i32;
         ix1 += ix1;
         r >>= 1;
     }
@@ -217,5 +218,5 @@ pub fn sqrt(x: f64) -> f64 {
         ix1 |= sign;
     }
     ix0 += m << 20;
-    f64::from_bits((ix0 as u64) << 32 | ix1 as u64)
+    f64::from_bits((ix0 as u64) << 32 | u64::from(ix1))
 }

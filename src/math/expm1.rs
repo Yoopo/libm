@@ -67,7 +67,7 @@ pub fn expm1(mut x: f64) -> f64 {
             }
         } else {
             k = (INVLN2 * x + if sign != 0 { -0.5 } else { 0.5 }) as i32;
-            t = k as f64;
+            t = f64::from(k);
             hi = x - t * LN2_HI; /* t*ln2_hi is exact here */
             lo = t * LN2_LO;
         }
@@ -114,7 +114,7 @@ pub fn expm1(mut x: f64) -> f64 {
         if k == 1024 {
             y = y * 2.0 * f64::from_bits(0x7fe0000000000000);
         } else {
-            y = y * twopk;
+            y *= twopk;
         }
         return y - 1.0;
     }

@@ -20,11 +20,11 @@ pub fn roundf(mut x: f32) -> f32 {
     }
     y = x + TOINT - TOINT - x;
     if y > 0.5f32 {
-        y = y + x - 1.0;
+        y += x - 1.0;
     } else if y <= -0.5f32 {
-        y = y + x + 1.0;
+        y += x + 1.0;
     } else {
-        y = y + x;
+        y += x;
     }
     if i >> 31 != 0 {
         -y

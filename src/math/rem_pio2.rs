@@ -52,7 +52,7 @@ pub fn rem_pio2(x: f64) -> (i32, f64, f64) {
     #[inline]
     fn medium(x: f64, ix: u32) -> (i32, f64, f64) {
         /* rint(x/(pi/2)), Assume round-to-nearest. */
-        let f_n = x as f64 * INV_PIO2 + TO_INT - TO_INT;
+        let f_n = x * INV_PIO2 + TO_INT - TO_INT;
         let n = f_n as i32;
         let mut r = x - f_n * PIO2_1;
         let mut w = f_n * PIO2_1T; /* 1st round, good to 85 bits */
@@ -78,7 +78,7 @@ pub fn rem_pio2(x: f64) -> (i32, f64, f64) {
             }
         }
         let y1 = (r - y0) - w;
-        return (n, y0, y1);
+        (n, y0, y1)
     }
 
     if ix <= 0x400f6a7a {
@@ -100,18 +100,16 @@ pub fn rem_pio2(x: f64) -> (i32, f64, f64) {
                 let y1 = (z - y0) + PIO2_1T;
                 return (-1, y0, y1);
             }
+        } else if sign == 0 {
+            let z = x - 2.0 * PIO2_1;
+            let y0 = z - 2.0 * PIO2_1T;
+            let y1 = (z - y0) - 2.0 * PIO2_1T;
+            return (2, y0, y1);
         } else {
-            if sign == 0 {
-                let z = x - 2.0 * PIO2_1;
-                let y0 = z - 2.0 * PIO2_1T;
-                let y1 = (z - y0) - 2.0 * PIO2_1T;
-                return (2, y0, y1);
-            } else {
-                let z = x + 2.0 * PIO2_1;
-                let y0 = z + 2.0 * PIO2_1T;
-                let y1 = (z - y0) + 2.0 * PIO2_1T;
-                return (-2, y0, y1);
-            }
+            let z = x + 2.0 * PIO2_1;
+            let y0 = z + 2.0 * PIO2_1T;
+            let y1 = (z - y0) + 2.0 * PIO2_1T;
+            return (-2, y0, y1);
         }
     }
     if ix <= 0x401c463b {
@@ -170,10 +168,11 @@ pub fn rem_pio2(x: f64) -> (i32, f64, f64) {
     ui |= (0x3ff + 23) << 52;
     let mut z = f64::from_bits(ui);
     let mut tx = [0.0; 3];
-    for i in 0..2 {
-        tx[i] = z as i32 as f64;
-        z = (z - tx[i]) * x1p24;
+    for tx_i in tx.iter_mut().take(2) {
+        *tx_i = f64::from(z as i32);
+        z = (z - *tx_i) * x1p24;
     }
+
     tx[2] = z;
     /* skip zero terms, first term is non-zero */
     let mut i = 2;
@@ -185,5 +184,5 @@ pub fn rem_pio2(x: f64) -> (i32, f64, f64) {
     if sign != 0 {
         return (-n, -ty[0], -ty[1]);
     }
-    return (n, ty[0], ty[1]);
+    (n, ty[0], ty[1])
 }

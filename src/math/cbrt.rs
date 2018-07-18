@@ -70,7 +70,7 @@ pub fn cbrt(x: f64) -> f64 {
         hx = hx / 3 + B1;
     }
     ui &= 1 << 63;
-    ui |= (hx as u64) << 32;
+    ui |= u64::from(hx) << 32;
     t = f64::from_bits(ui);
 
     /*
@@ -84,7 +84,7 @@ pub fn cbrt(x: f64) -> f64 {
      * Try to optimize for parallel evaluation as in __tanf.c.
      */
     r = (t * t) * (t / x);
-    t = t * ((P0 + r * (P1 + r * P2)) + ((r * r) * r) * (P3 + r * P4));
+    t *= (P0 + r * (P1 + r * P2)) + ((r * r) * r) * (P3 + r * P4);
 
     /*
      * Round t away from zero to 23 bits (sloppily except for ensuring that

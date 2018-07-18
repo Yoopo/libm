@@ -50,9 +50,9 @@ pub fn tan(x: f64) -> f64 {
             /* |x| < 2**-27 */
             /* raise inexact if x!=0 and underflow if subnormal */
             force_eval!(if ix < 0x00100000 {
-                x / x1p120 as f64
+                x / f64::from(x1p120)
             } else {
-                x + x1p120 as f64
+                x + f64::from(x1p120)
             });
             return x;
         }

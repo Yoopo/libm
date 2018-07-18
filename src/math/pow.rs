@@ -164,13 +164,11 @@ pub fn pow(x: f64, y: f64) -> f64 {
                 } else {
                     0.0
                 }
+            /* (|x|<1)**+-inf = 0,inf */
+            } else if hy >= 0 {
+                0.0
             } else {
-                /* (|x|<1)**+-inf = 0,inf */
-                if hy >= 0 {
-                    0.0
-                } else {
-                    -y
-                }
+                -y
             };
         }
 
@@ -184,37 +182,32 @@ pub fn pow(x: f64, y: f64) -> f64 {
             return x * x;
         }
 
-        if hy == 0x3fe00000 {
-            /* y is 0.5 */
-            if hx >= 0 {
-                /* x >= +0 */
-                return sqrt(x);
-            }
+        /* y is 0.5  and x >= +0*/
+        if hy == 0x3fe00000 && hx >= 0 {
+            return sqrt(x);
         }
     }
 
     let mut ax: f64 = fabs(x);
-    if lx == 0 {
-        /* special value of x */
-        if ix == 0x7ff00000 || ix == 0 || ix == 0x3ff00000 {
-            /* x is +-0,+-inf,+-1 */
-            let mut z: f64 = ax;
+    /* special value of x */
+    if lx == 0 && (ix == 0x7ff00000 || ix == 0 || ix == 0x3ff00000) {
+        /* x is +-0,+-inf,+-1 */
+        let mut z: f64 = ax;
 
-            if hy < 0 {
-                /* z = (1/|x|) */
-                z = 1.0 / z;
-            }
-
-            if hx < 0 {
-                if ((ix - 0x3ff00000) | yisint) == 0 {
-                    z = (z - z) / (z - z); /* (-1)**non-int is NaN */
-                } else if yisint == 1 {
-                    z = -z; /* (x<0)**odd = -(|x|**odd) */
-                }
-            }
-
-            return z;
+        if hy < 0 {
+            /* z = (1/|x|) */
+            z = 1.0 / z;
         }
+
+        if hx < 0 {
+            if ((ix - 0x3ff00000) | yisint) == 0 {
+                z = (z - z) / (z - z); /* (-1)**non-int is NaN */
+            } else if yisint == 1 {
+                z = -z; /* (x<0)**odd = -(|x|**odd) */
+            }
+        }
+
+        return z;
     }
 
     let mut s: f64 = 1.0; /* sign of result */
@@ -331,7 +324,7 @@ pub fn pow(x: f64, y: f64) -> f64 {
         let z_l: f64 = CP_L * p_h + p_l * CP + DP_L[k as usize];
 
         /* log2(ax) = (ss+..)*2/(3*log2) = n + dp_h + z_h + z_l */
-        let t: f64 = n as f64;
+        let t: f64 = f64::from(n);
         t1 = with_set_low_word(((z_h + z_l) + DP_H[k as usize]) + t, 0);
         t2 = z_l - (((t1 - t) - DP_H[k as usize]) - z_h);
     }
@@ -405,5 +398,5 @@ pub fn pow(x: f64, y: f64) -> f64 {
         z = with_set_high_word(z, j as u32);
     }
 
-    return s * z;
+    s * z
 }

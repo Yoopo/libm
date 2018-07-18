@@ -26,7 +26,7 @@ const C4_PIO2: f64 = 4. * FRAC_PI_2; /* 0x401921FB, 0x54442D18 */
 
 #[inline]
 pub fn cosf(x: f32) -> f32 {
-    let x64 = x as f64;
+    let x64 = f64::from(x);
 
     let x1p120 = f32::from_bits(0x7b800000); // 0x1p120f === 2 ^ 120
 
@@ -49,12 +49,10 @@ pub fn cosf(x: f32) -> f32 {
         if ix > 0x4016cbe3 {
             /* |x|  ~> 3*pi/4 */
             return -k_cosf(if sign { x64 + C2_PIO2 } else { x64 - C2_PIO2 });
+        } else if sign {
+            return k_sinf(x64 + C1_PIO2);
         } else {
-            if sign {
-                return k_sinf(x64 + C1_PIO2);
-            } else {
-                return k_sinf(C1_PIO2 - x64);
-            }
+            return k_sinf(C1_PIO2 - x64);
         }
     }
     if ix <= 0x40e231d5 {
@@ -62,12 +60,10 @@ pub fn cosf(x: f32) -> f32 {
         if ix > 0x40afeddf {
             /* |x| ~> 7*pi/4 */
             return k_cosf(if sign { x64 + C4_PIO2 } else { x64 - C4_PIO2 });
+        } else if sign {
+            return k_sinf(-x64 - C3_PIO2);
         } else {
-            if sign {
-                return k_sinf(-x64 - C3_PIO2);
-            } else {
-                return k_sinf(x64 - C3_PIO2);
-            }
+            return k_sinf(x64 - C3_PIO2);
         }
     }
 

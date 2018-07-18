@@ -128,7 +128,7 @@ pub fn log1p(x: f64) -> f64 {
         }
         /* reduce u into [sqrt(2)/2, sqrt(2)] */
         hu = (hu & 0x000fffff) + 0x3fe6a09e;
-        ui = (hu as u64) << 32 | (ui & 0xffffffff);
+        ui = u64::from(hu) << 32 | (ui & 0xffffffff);
         f = f64::from_bits(ui) - 1.;
     }
     hfsq = 0.5 * f * f;
@@ -138,6 +138,6 @@ pub fn log1p(x: f64) -> f64 {
     t1 = w * (LG2 + w * (LG4 + w * LG6));
     t2 = z * (LG1 + w * (LG3 + w * (LG5 + w * LG7)));
     r = t2 + t1;
-    dk = k as f64;
-    return s * (hfsq + r) + (dk * LN2_LO + c) - hfsq + f + dk * LN2_HI;
+    dk = f64::from(k);
+    s * (hfsq + r) + (dk * LN2_LO + c) - hfsq + f + dk * LN2_HI
 }

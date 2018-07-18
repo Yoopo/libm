@@ -56,16 +56,16 @@ pub fn cbrtf(x: f32) -> f32 {
      * double precision so that its terms can be arranged for efficiency
      * without causing overflow or underflow.
      */
-    t = f32::from_bits(ui) as f64;
+    t = f64::from(f32::from_bits(ui));
     r = t * t * t;
-    t = t * (x as f64 + x as f64 + r) / (x as f64 + r + r);
+    t = t * (f64::from(x) + f64::from(x) + r) / (f64::from(x) + r + r);
 
     /*
      * Second step Newton iteration to 47 bits.  In double precision for
      * efficiency and accuracy.
      */
     r = t * t * t;
-    t = t * (x as f64 + x as f64 + r) / (x as f64 + r + r);
+    t = t * (f64::from(x) + f64::from(x) + r) / (f64::from(x) + r + r);
 
     /* rounding to 24 bits is perfect in round-to-nearest mode */
     t as f32

@@ -47,12 +47,10 @@ pub fn cos(x: f64) -> f64 {
 
     /* |x| ~< pi/4 */
     if ix <= 0x3fe921fb {
-        if ix < 0x3e46a09e {
-            /* if x < 2**-27 * sqrt(2) */
-            /* raise inexact if x != 0 */
-            if x as i32 == 0 {
-                return 1.0;
-            }
+        /* if x < 2**-27 * sqrt(2) */
+        /* raise inexact if x != 0 */
+        if ix < 0x3e46a09e && x as i32 == 0 {
+            return 1.0;
         }
         return k_cos(x, 0.0);
     }

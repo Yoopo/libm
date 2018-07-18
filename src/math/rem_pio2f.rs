@@ -33,7 +33,7 @@ const PIO2_1T: f64 = 1.58932547735281966916e-08; /* 0x3E5110b4, 0x611A6263 */
 /// use __rem_pio2_large() for large x
 #[inline]
 pub fn rem_pio2f(x: f32) -> (i32, f64) {
-    let x64 = x as f64;
+    let x64 = f64::from(x);
 
     let mut tx: [f64; 1] = [0.];
     let mut ty: [f64; 1] = [0.];
@@ -53,7 +53,7 @@ pub fn rem_pio2f(x: f32) -> (i32, f64) {
     /* scale x into [2^23, 2^24-1] */
     let sign = (x.to_bits() >> 31) != 0;
     let e0 = ((ix >> 23) - (0x7f + 23)) as i32; /* e0 = ilogb(|x|)-23, positive */
-    tx[0] = f32::from_bits(ix - (e0 << 23) as u32) as f64;
+    tx[0] = f64::from(f32::from_bits(ix - (e0 << 23) as u32));
     let n = rem_pio2_large(&tx, &mut ty, e0, 0);
     if sign {
         return (-n, -ty[0]);
