@@ -10,19 +10,19 @@
 //! `f32` and `f64` types. Then you'll be able to invoke math functions as methods, e.g. `x.sqrt()`.
 
 #![deny(warnings)]
-#![cfg_attr(feature = "cargo-clippy", allow(
-    unreadable_literal,
-    many_single_char_names,
-    excessive_precision,
+#![allow(
+    clippy::unreadable_literal,
+    clippy::many_single_char_names,
+    clippy::excessive_precision,
     // to allow x-x to handle Nan and inf this should probably be improved
     // see : https://github.com/rust-lang-nursery/rust-clippy/issues/1466
     // x / 0. -> INF
     // (x-x) -> NAN
-    eq_op,
-    float_cmp,
+    clippy::eq_op,
+    clippy::float_cmp,
     // this should probably be removed for long terme plan(better optimisation)
-    cyclomatic_complexity
-))]
+    clippy::cyclomatic_complexity
+)]
 #![no_std]
 #![cfg_attr(
     all(target_arch = "wasm32", not(feature = "stable")),
