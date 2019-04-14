@@ -1,56 +1,75 @@
-# `libm`
+# Rust implementation of libm
 
-A port of [MUSL]'s libm to Rust.
+## Folder architecture
 
-[MUSL]: https://www.musl-libc.org/
+The folder structure is inspired by librsvg, which succesfully port a c project to rust keeping a compatible interface
+https://gitlab.gnome.org/GNOME/librsvg
 
-## Goals
+- libm : source code expositon a c ABI libm compatible version
+- libm_internals : implementation of math function in rust
+- libm_crate : rust libm crate
 
-The short term goal of this library is to [enable math support (e.g. `sin`, `atan2`) for the
-`wasm32-unknown-unknown` target][wasm] (cf. [rust-lang-nursery/compiler-builtins][pr]). The longer
-term goal is to enable [math support in the `core` crate][core].
+## TODO
 
-[wasm]: https://github.com/japaric/libm/milestone/1
-[pr]: https://github.com/rust-lang-nursery/compiler-builtins/pull/248
-[core]: https://github.com/japaric/libm/milestone/2
+- backport llvm intrinsic for wasm
 
-## Already usable
+  - fork and check if rustc wasm atrget is borken
+  - https://github.com/rust-lang-nursery/compiler-builtins/pull/248
 
-This crate is [on crates.io] and can be used today in stable `#![no_std]` programs like this:
+Compare static link libm Vs dynlibm (rust carte will static link our math lib it may be an argument for it almost 2x)
+Check FLT_EVAL method as feature(rint)
+make relibm no std
+restore original musl comment
+backport last change from musl
+continue to document change in readme or in a separate doc
+mark musl last updated commit hash in every function
+backport the intrinsic cfg in rust crate (may us a cfg in lib which use intrinsic)
+Use f32::EPSILON; instead of EPS ?
+backport japardic old test aka no std test
+clean up feature flags to simplify modularity (musl Vs newlib with or with out intrinsic / cuda)
+test all feature combinations
+add new lib test
 
-[on crates.io]: https://crates.io/crates/libm
+## Notes
 
-``` rust
-#![no_std]
+Should relibm be no std (panic handler ?) => YES
+try the relibc architecture and build
 
-extern crate libm;
+Internal should use result istead of errno like
+Openlibm deprecated ?
+https://github.com/JuliaLang/julia/issues/18102
 
-use libm::F32Ext; // adds methods to `f32`
+Take a look at sleef (SIMD libm)
+May be directly integrated in llvm ?
 
-fn foo(x: f32) {
-    let y = x.sqrt();
-    let z = libm::truncf(x);
-}
-```
+Try and merge all current PR on GitHub in my fork
+Merge 153
 
-The API documentation can be found [here](https://docs.rs/libm).
+Port newlib for f32 ?
 
-## Contributing
+Need benchmark, use test ?
+Quick check
+fuzzing
 
-Please check [CONTRIBUTING.md](CONTRIBUTING.md)
+split 32 bit and 64 bit impl for calrity
 
-## License
+newlib
+./configure --host=i686-pc-linux --with-newlib && make
+new lib may need cross compile to be tested (x86_64 not suported)
+Quick check against libm
+Proptest
+Pallette use libm for no std
+Use rust cont instead of #define LDBL_EPSILON
 
-Licensed under either of
+Is cuda llvm.nvvm.sin.approx.f equivalent to use llvm llvm.sin.f32
+will llvm choose it on cuda target ?
 
-- Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or
-  http://www.apache.org/licenses/LICENSE-2.0)
-- MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
+Check clang fast-math-flag ‘afn’
 
-at your option.
+- How do we enable it as feature in libm
+- https://github.com/rust-lang/rust/issues/40063
 
-### Contribution
+libm origine ?
+https://github.com/rustwasm/team/issues/84
 
-Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the
-work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any
-additional terms or conditions.
+script that monitor commit on musl an alert at compile time of deprecation

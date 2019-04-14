@@ -1,0 +1,13 @@
+[package]
+name = "relibm"
+version = "0.1.0"
+authors = ["augustin <cheron.augustin@gmail.com>"]
+edition = "2018"
+
+[lib]
+name = "relibm"
+crate-type = ["staticlib", "cdylib", "dylib"]
+
+[dependencies]
+libc = { version = "0.2", default-features=false}
+libm_internals = {path="../libm_internals/"}

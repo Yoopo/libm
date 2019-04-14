@@ -1,0 +1,15 @@
+[package]
+name = "libm_internals"
+version = "0.1.0"
+authors = ["augustin <cheron.augustin@gmail.com>"]
+edition = "2018"
+
+[features]
+default = ['stable', 'musl']
+newlib = []
+musl = []
+stable = []
+# only used to run our test suite
+checked = []
+
+[dependencies]
