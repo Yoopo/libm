@@ -108,6 +108,7 @@ mod fmod;
 mod fmodf;
 mod hypot;
 mod hypotf;
+mod ilogb;
 mod lgamma;
 mod log;
 mod log10;
@@ -119,11 +120,13 @@ mod log2f;
 mod logf;
 mod pow;
 mod powf;
+mod rint;
 mod round;
 mod roundf;
 mod scalbn;
 mod scalbnf;
 mod sin;
+mod sincos;
 mod sinf;
 mod sinh;
 mod sinhf;
@@ -135,7 +138,6 @@ mod tanh;
 mod tanhf;
 mod trunc;
 mod truncf;
-mod ilogb;
 
 // Use separated imports instead of {}-grouped imports for easier merging.
 pub use self::acos::acos;
@@ -177,6 +179,7 @@ pub use self::fmod::fmod;
 pub use self::fmodf::fmodf;
 pub use self::hypot::hypot;
 pub use self::hypotf::hypotf;
+pub use self::ilogb::ilogb;
 pub use self::lgamma::lgamma;
 pub use self::log::log;
 pub use self::log10::log10;
@@ -188,11 +191,13 @@ pub use self::log2f::log2f;
 pub use self::logf::logf;
 pub use self::pow::pow;
 pub use self::powf::powf;
+pub use self::rint::rint;
 pub use self::round::round;
 pub use self::roundf::roundf;
 pub use self::scalbn::scalbn;
 pub use self::scalbnf::scalbnf;
 pub use self::sin::sin;
+pub use self::sincos::sincos;
 pub use self::sinf::sinf;
 pub use self::sinh::sinh;
 pub use self::sinhf::sinhf;
@@ -204,15 +209,12 @@ pub use self::tanh::tanh;
 pub use self::tanhf::tanhf;
 pub use self::trunc::trunc;
 pub use self::truncf::truncf;
-pub use self::ilogb::ilogb;
-
 
 #[no_mangle]
 pub static mut signgam: i32 = 0;
 
-pub const FP_ILOGBNAN : i32 = (-1-0x7fffffff);
-pub const FP_ILOGB0	: i32 = FP_ILOGBNAN;
-
+pub const FP_ILOGBNAN: i32 = (-1 - 0x7fffffff);
+pub const FP_ILOGB0: i32 = FP_ILOGBNAN;
 
 // Private modules
 mod expo2;
@@ -236,15 +238,14 @@ use self::k_cos::k_cos;
 use self::k_cosf::k_cosf;
 use self::k_expo2::k_expo2;
 use self::k_expo2f::k_expo2f;
+use self::k_lgamma_r::k_lgamma_r;
 use self::k_sin::k_sin;
 use self::k_sinf::k_sinf;
 use self::k_tan::k_tan;
 use self::k_tanf::k_tanf;
-use self::k_lgamma_r::k_lgamma_r;
 use self::rem_pio2::rem_pio2;
 use self::rem_pio2_large::rem_pio2_large;
 use self::rem_pio2f::rem_pio2f;
-
 
 #[inline]
 fn get_high_word(x: f64) -> u32 {

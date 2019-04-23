@@ -1,4 +1,3 @@
-
 use crate::{log, sqrt};
 use core::f64;
 

@@ -1,5 +1,5 @@
 #![no_std]
-use libc::{c_double, c_float, c_int};
+use libc::{c_double, c_float, c_int, c_long, c_longlong};
 use libm_internals;
 
 #[no_mangle]
@@ -353,12 +353,46 @@ pub extern "C" fn ilogb(arg: c_double) -> c_int {
     libm_internals::ilogb(arg) as c_int
 }
 
-extern {
+#[no_mangle]
+pub extern "C" fn llround(arg: c_double) -> c_longlong {
+    libm_internals::round(arg) as c_longlong
+}
+
+#[no_mangle]
+pub extern "C" fn lround(arg: c_double) -> c_long {
+    libm_internals::round(arg) as c_long
+}
+
+#[no_mangle]
+pub extern "C" fn llrint(arg: c_double) -> c_longlong {
+    libm_internals::rint(arg) as c_longlong
+}
+
+#[no_mangle]
+pub extern "C" fn lrint(arg: c_double) -> c_long {
+    libm_internals::rint(arg) as c_long
+}
+
+#[no_mangle]
+pub extern "C" fn rint(arg: c_double) -> c_double {
+    libm_internals::rint(arg)
+}
+
+#[no_mangle]
+pub extern "C" fn sincos(x: c_double, sin: *mut c_double, cos: *mut c_double) {
+    let (rsin, rcos) = libm_internals::sincos(x);
+    unsafe {
+        *sin = rsin;
+        *cos = rcos;
+    }
+}
+
+extern "C" {
     static signgam: c_int;
 }
 
-pub const FP_ILOGBNAN : i32 = libm_internals::FP_ILOGBNAN;
-pub const FP_ILOGB0	: i32 = libm_internals::FP_ILOGB0;
+pub const FP_ILOGBNAN: i32 = libm_internals::FP_ILOGBNAN;
+pub const FP_ILOGB0: i32 = libm_internals::FP_ILOGB0;
 
 #[cfg(test)]
 mod tests {

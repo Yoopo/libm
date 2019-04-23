@@ -102,7 +102,6 @@ fn erfc2(ix: u32, x: f64) -> f64 {
 }
 
 pub fn erf(x: f64) -> f64 {
-
     let mut ix = get_high_word(x);
     let sign: u32 = ix >> 31;
     ix &= 0x7fffffff;

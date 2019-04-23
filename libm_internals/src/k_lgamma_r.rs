@@ -169,7 +169,9 @@ pub fn k_lgamma_r(x: f64, signgamp: &mut i32) -> f64 {
     let mut r: f64 = 0.0;
 
     /* purge off +-inf, NaN, +-0, tiny and negative arguments */
-    unsafe {*signgamp = 1;}
+    unsafe {
+        *signgamp = 1;
+    }
     let sign = u >> 63;
     let ix: u64 = u >> 32 & 0x7fffffff;
     if ix >= 0x7ff00000 {
@@ -178,8 +180,10 @@ pub fn k_lgamma_r(x: f64, signgamp: &mut i32) -> f64 {
     if ix < (0x3ff - 70) << 20 {
         /* |x|<2**-70, return -log(|x|) */
         if sign != 0 {
-            unsafe {*signgamp = -1;}
-			return -log(-x);
+            unsafe {
+                *signgamp = -1;
+            }
+            return -log(-x);
         }
         return -log(x);
     }
@@ -191,7 +195,9 @@ pub fn k_lgamma_r(x: f64, signgamp: &mut i32) -> f64 {
             return 1.0 / (x - x);
         }
         if t > 0.0 {
-            unsafe {*signgamp = -1;}
+            unsafe {
+                *signgamp = -1;
+            }
         } else {
             t = -t;
         }
@@ -255,8 +261,8 @@ pub fn k_lgamma_r(x: f64, signgamp: &mut i32) -> f64 {
                 let p1 = y * (u0 + y * (u1 + y * (u2 + y * (u3 + y * (u4 + y * u5)))));
                 let p2 = 1.0 + y * (v1 + y * (v2 + y * (v3 + y * (v4 + y * v5))));
                 r += -0.5 * y + p1 / p2;
-            },
-			_ => ()
+            }
+            _ => (),
         }
     } else if (ix < 0x40200000) {
         /* x < 8.0 */
@@ -297,8 +303,8 @@ pub fn k_lgamma_r(x: f64, signgamp: &mut i32) -> f64 {
             3 => {
                 z *= y + 2.0;
                 r += log(z);
-            },
-			_ => ()
+            }
+            _ => (),
         }
     } else if (ix < 0x43900000) {
         /* 8.0 <= x < 2**58 */
