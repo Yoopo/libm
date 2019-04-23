@@ -1,68 +1,14 @@
-# `libm`
+# Rust implementation of libm
 
-A port of [MUSL]'s libm to Rust.
+## Folder architecture
 
-[MUSL]: https://www.musl-libc.org/
+The folder structure is inspired by librsvg, which succesfully port a c project to rust keeping a compatible interface
+https://gitlab.gnome.org/GNOME/librsvg
 
-## Goals
+* libm : source code expositon a c ABI libm compatible version
+* libm_internals : implementation of math function in rust
+* libm_crate : rust libm crate
 
-The short term goal of this library is to [enable math support (e.g. `sin`, `atan2`) for the
-`wasm32-unknown-unknown` target][wasm] (cf. [rust-lang-nursery/compiler-builtins][pr]). The longer
-term goal is to enable [math support in the `core` crate][core].
+## Notes
 
-[wasm]: https://github.com/japaric/libm/milestone/1
-[pr]: https://github.com/rust-lang-nursery/compiler-builtins/pull/248
-[core]: https://github.com/japaric/libm/milestone/2
-
-## Already usable
-
-This crate is [on crates.io] and can be used today in stable `#![no_std]` programs like this:
-
-[on crates.io]: https://crates.io/crates/libm
-
-``` rust
-#![no_std]
-
-extern crate libm;
-
-use libm::F32Ext; // adds methods to `f32`
-
-fn foo(x: f32) {
-    let y = x.sqrt();
-    let z = libm::truncf(x);
-}
-```
-
-The API documentation can be found [here](https://docs.rs/libm).
-
-## Contributing
-
-Please check [CONTRIBUTING.md](CONTRIBUTING.md)
-
-## License
-
-Licensed under either of
-
-- Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or
-  http://www.apache.org/licenses/LICENSE-2.0)
-- MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
-
-at your option.
-
-### Contribution
-
-Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the
-work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any
-additional terms or conditions.
-
-# Objectif of this fork
-
-* Be an alternative to onpenlib in redox relibc
-* Allow no-std to use math
-
-## Tasks
-
-* Add compile time option option for fast Vs reliable math option
-* Have a unified libm test suite
-* Add a compatible libc linkable objects
-
+try the relibc architecture and build

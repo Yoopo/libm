@@ -1,0 +1,13 @@
+[package]
+name = "libm"
+version = "0.1.0"
+authors = ["augustin <cheron.augustin@gmail.com>"]
+edition = "2018"
+
+[lib]
+name = "libm"
+crate-type = ["staticlib", "cdylib"]
+
+[dependencies]
+libc = { version = "0.2", default-features=false}
+libm_internals = {path="../libm_internals/"}

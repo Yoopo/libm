@@ -19,5 +19,8 @@ musl = []
 default = ['stable', 'musl']
 stable = []
 
+[dependencies]
+libm_internals = {path="../libm_internals/"}
+
 [dev-dependencies]
 libc = { version = "0.2", default-features = false }

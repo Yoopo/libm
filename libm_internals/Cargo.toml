@@ -1,0 +1,12 @@
+[package]
+name = "libm_internals"
+version = "0.1.0"
+authors = ["augustin <cheron.augustin@gmail.com>"]
+edition = "2018"
+
+[lib]
+name = "libm_internals"
+crate-type = ["staticlib", "lib"]
+
+
+[dependencies]
