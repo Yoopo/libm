@@ -135,6 +135,7 @@ mod tanh;
 mod tanhf;
 mod trunc;
 mod truncf;
+mod ilogb;
 
 // Use separated imports instead of {}-grouped imports for easier merging.
 pub use self::acos::acos;
@@ -203,6 +204,15 @@ pub use self::tanh::tanh;
 pub use self::tanhf::tanhf;
 pub use self::trunc::trunc;
 pub use self::truncf::truncf;
+pub use self::ilogb::ilogb;
+
+
+#[no_mangle]
+pub static mut signgam: i32 = 0;
+
+pub const FP_ILOGBNAN : i32 = (-1-0x7fffffff);
+pub const FP_ILOGB0	: i32 = FP_ILOGBNAN;
+
 
 // Private modules
 mod expo2;
@@ -235,8 +245,6 @@ use self::rem_pio2::rem_pio2;
 use self::rem_pio2_large::rem_pio2_large;
 use self::rem_pio2f::rem_pio2f;
 
-#[no_mangle]
-pub static mut signgam: i32 = 0;
 
 #[inline]
 fn get_high_word(x: f64) -> u32 {

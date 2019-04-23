@@ -348,9 +348,17 @@ pub extern "C" fn lgamma(arg: c_double) -> c_double {
     libm_internals::lgamma(arg)
 }
 
+#[no_mangle]
+pub extern "C" fn ilogb(arg: c_double) -> c_int {
+    libm_internals::ilogb(arg) as c_int
+}
+
 extern {
     static signgam: c_int;
 }
+
+pub const FP_ILOGBNAN : i32 = libm_internals::FP_ILOGBNAN;
+pub const FP_ILOGB0	: i32 = libm_internals::FP_ILOGB0;
 
 #[cfg(test)]
 mod tests {
