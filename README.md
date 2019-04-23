@@ -54,3 +54,15 @@ at your option.
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the
 work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any
 additional terms or conditions.
+
+# Objectif of this fork
+
+* Be an alternative to onpenlib in redox relibc
+* Allow no-std to use math
+
+## Tasks
+
+* Add compile time option option for fast Vs reliable math option
+* Have a unified libm test suite
+* Add a compatible libc linkable objects
+

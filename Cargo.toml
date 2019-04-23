@@ -19,15 +19,5 @@ musl = []
 default = ['stable', 'musl']
 stable = []
 
-[workspace]
-members = [
-  "cb",
-  "input-generator",
-  "musl-generator",
-  "newlib-generator",
-  "shared",
-]
-
 [dev-dependencies]
-shared = { path = "shared" }
-libc = { version = "^0.2", default-features = false }
+libc = { version = "0.2", default-features = false }
