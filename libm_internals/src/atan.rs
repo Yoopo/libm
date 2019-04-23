@@ -144,12 +144,12 @@ mod tests {
     #[test]
     fn sanity_check() {
         for (input, answer) in [
-            (3_f64.sqrt() / 3., f64::consts::FRAC_PI_6),
-            (1., f64::consts::FRAC_PI_4),
-            (3_f64.sqrt(), f64::consts::FRAC_PI_3),
-            (-3_f64.sqrt() / 3., -f64::consts::FRAC_PI_6),
-            (-1., -f64::consts::FRAC_PI_4),
-            (-3_f64.sqrt(), -f64::consts::FRAC_PI_3),
+            (3.0_f64.sqrt() / 3.0, f64::consts::FRAC_PI_6),
+            (1.0, f64::consts::FRAC_PI_4),
+            (3.0_f64.sqrt(), f64::consts::FRAC_PI_3),
+            (-3.0_f64.sqrt() / 3.0, -f64::consts::FRAC_PI_6),
+            (-1.0, -f64::consts::FRAC_PI_4),
+            (-3.0_f64.sqrt(), -f64::consts::FRAC_PI_3),
         ]
         .iter()
         {
