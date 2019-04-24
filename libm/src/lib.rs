@@ -1,5 +1,6 @@
 #![no_std]
 use libc::{c_double, c_float, c_int, c_long, c_longlong};
+use core::{f64, i32};
 use libm_internals;
 
 #[no_mangle]
@@ -377,6 +378,11 @@ pub extern "C" fn lrint(arg: c_double) -> c_long {
 pub extern "C" fn rint(arg: c_double) -> c_double {
     libm_internals::rint(arg)
 }
+#[no_mangle]
+pub extern "C" fn nearbyint(arg: c_double) -> c_double {
+    // FIXME: should not rise error
+    libm_internals::rint(arg)
+}
 
 #[no_mangle]
 pub extern "C" fn sincos(x: c_double, sin: *mut c_double, cos: *mut c_double) {
@@ -386,6 +392,32 @@ pub extern "C" fn sincos(x: c_double, sin: *mut c_double, cos: *mut c_double) {
         *cos = rcos;
     }
 }
+// fixme should probably be in internals
+#[no_mangle]
+pub extern "C" fn scalbln( x: c_double, n : c_long) -> c_double
+{
+	if n > i32::max_value() as i64 {
+        libm_internals::scalbn(x, i32::max_value())
+    } else if  n < i32::min_value()  as i64  {
+        libm_internals::scalbn(x, i32::min_value())
+    } else {
+        libm_internals::scalbn(x, n as i32)
+    }
+}
+
+// fixme should probably be in internals
+#[no_mangle]
+pub extern "C" fn logb( x: c_double) -> c_double
+{
+	if (x as f64).is_infinite() {
+		return x * x;
+    }
+	if x == 0.0 {
+		return -1.0/(x*x);
+    }
+	return libm_internals::ilogb(x) as f64;
+}
+
 
 extern "C" {
     static signgam: c_int;

@@ -14,6 +14,8 @@ https://gitlab.gnome.org/GNOME/librsvg
 use git submodules for test
 use docker for tests ?
 Check FLT_EVAL method as feature(rint)
+proper testing : remove path to get static lib
+make it no_std again
 
 ## Notes
 
@@ -32,6 +34,8 @@ Merge 153
 Port newlib for f32 ?
 
 Need benchmark, use test ?
+Quick check
+fuzzing
 
 split 32 bit and 64 bit impl for calrity
 
@@ -39,4 +43,4 @@ newlib
 ./configure --host=i686-pc-linux --with-newlib && make
 new lib may need cross compile to be tested (x86_64 not suported)
 
-#define LDBL_EPSILON 
+#define LDBL_EPSILON
