@@ -19,10 +19,12 @@ make it no_std again
 restore original comment
 backport last change from musl
 continue to document change in readme or in a separate doc
-mark musl last updated commit hash
+mark musl last updated commit hash in every function
 backport the intrinsic cfg in rust crate (may us a cfg in lib which use intrinsic)
 name the c libm relibm ?
 Use f32::EPSILON; instead of EPS ?
+backport japardic old test aka no std test
+script that monitor commit on musl an
 
 ## Notes
 

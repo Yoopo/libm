@@ -34,18 +34,18 @@
  *      values of n>1.
  */
 
-use super::{cos, fabs, get_high_word, get_low_word, j0, j1, sin, y0, y1, sqrt, log};
+use super::{cos, fabs, get_high_word, get_low_word, j0, j1, log, sin, sqrt, y0, y1};
 
 const invsqrtpi: f64 = 5.64189583547756279280e-01; /* 0x3FE20DD7, 0x50429B6D */
 
 pub fn jn(n: u32, x: f64) -> f64 {
-	let mut x = x;
+    let mut x = x;
     let mut ix = get_high_word(x);
     let lx = get_low_word(x);
     let mut sign = ix >> 31;
     ix &= 0x7fffffff;
 
-    if ((ix | (lx | !lx+1) >> 31) > 0x7ff00000) {
+    if ((ix | (lx | !lx + 1) >> 31) > 0x7ff00000) {
         /* nan */
         return x;
     }
@@ -60,9 +60,9 @@ pub fn jn(n: u32, x: f64) -> f64 {
     let nm1 = if (n < 0) {
         x = -x;
         sign ^= 1;
-		!(n + 1)+1
+        !(n + 1) + 1
     } else {
-       n - 1
+        n - 1
     };
     if (nm1 == 0) {
         return j1(x);
@@ -237,7 +237,7 @@ pub fn yn(n: u32, x: f64) -> f64 {
     let mut sign = ix >> 31;
     ix &= 0x7fffffff;
 
-    if ((ix | (lx | !lx+1) >> 31) > 0x7ff00000) {
+    if ((ix | (lx | !lx + 1) >> 31) > 0x7ff00000) {
         /* nan */
         return x;
     }

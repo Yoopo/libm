@@ -445,6 +445,13 @@ pub extern "C" fn jn(n: c_int,x: c_double) -> c_double {
 pub extern "C" fn yn(n: c_int, x: c_double) -> c_double {
     return libm_internals::yn(n as u32, x)
 }
+
+#[no_mangle]
+pub extern "C" fn nextafter(x: c_double,y: c_double) -> c_double {
+    return libm_internals::nextafter(x, y);
+}
+
+
 extern "C" {
     static signgam: c_int;
 }
