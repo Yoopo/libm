@@ -16,6 +16,13 @@ use docker for tests ?
 Check FLT_EVAL method as feature(rint)
 proper testing : remove path to get static lib
 make it no_std again
+restore original comment
+backport last change from musl
+continue to document change in readme or in a separate doc
+mark musl last updated commit hash
+backport the intrinsic cfg in rust crate (may us a cfg in lib which use intrinsic)
+name the c libm relibm ?
+Use f32::EPSILON; instead of EPS ?
 
 ## Notes
 
@@ -42,5 +49,8 @@ split 32 bit and 64 bit impl for calrity
 newlib
 ./configure --host=i686-pc-linux --with-newlib && make
 new lib may need cross compile to be tested (x86_64 not suported)
+Quick check against libm
+Proptest
+Pallette use libm for no std
 
 #define LDBL_EPSILON

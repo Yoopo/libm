@@ -34,6 +34,7 @@
  *      values of n>1.
  */
 
+use super::{fabs, j0, j1, cos, sin, get_high_word, get_low_word};
 
 const invsqrtpi : f64 = 5.64189583547756279280e-01; /* 0x3FE20DD7, 0x50429B6D */
 
@@ -43,27 +44,32 @@ pub fn jn(n:i32, x:f64) -> f64
 	int nm1, i, sign;
 	double a, b, temp;
 
-	EXTRACT_WORDS(ix, lx, x);
-	sign = ix>>31;
+	let mut ix = get_high_word(x);
+	let lx = get_low_word(x);
+	let mut sign = ix>>31;
 	ix &= 0x7fffffff;
 
-	if ((ix | (lx|-lx)>>31) > 0x7ff00000) /* nan */
+	if ((ix | (lx|-lx)>>31) > 0x7ff00000) { /* nan */
 		return x;
+	}
 
 	/* J(-n,x) = (-1)^n * J(n, x), J(n, -x) = (-1)^n * J(n, x)
 	 * Thus, J(-n,x) = J(n,-x)
 	 */
 	/* nm1 = |n|-1 is used instead of |n| to handle n==INT_MIN */
-	if (n == 0)
+	if (n == 0) {
 		return j0(x);
+	}
 	if (n < 0) {
 		nm1 = -(n+1);
 		x = -x;
 		sign ^= 1;
-	} else
+	} else {
 		nm1 = n-1;
-	if (nm1 == 0)
+	}
+	if (nm1 == 0) {
 		return j1(x);
+	}
 
 	sign &= n;  /* even n: 0, odd n: signbit(x) */
 	x = fabs(x);
