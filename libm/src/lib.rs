@@ -436,6 +436,15 @@ pub extern "C" fn y1(x: c_double) -> c_double {
     return libm_internals::y1(x)
 }
 
+#[no_mangle]
+pub extern "C" fn jn(n: c_int,x: c_double) -> c_double {
+    return libm_internals::jn(n as u32, x)
+}
+
+#[no_mangle]
+pub extern "C" fn yn(n: c_int, x: c_double) -> c_double {
+    return libm_internals::yn(n as u32, x)
+}
 extern "C" {
     static signgam: c_int;
 }

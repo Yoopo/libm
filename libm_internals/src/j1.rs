@@ -54,7 +54,7 @@
  *         by method mentioned above.
  */
 
-use super::{cos, get_high_word, get_low_word, sin, log, sqrt, fabs};
+use super::{cos, fabs, get_high_word, get_low_word, log, sin, sqrt};
 
 const invsqrtpi: f64 = 5.64189583547756279280e-01; /* 0x3FE20DD7, 0x50429B6D */
 const tpi: f64 = 6.36619772367581382433e-01; /* 0x3FE45F30, 0x6DC9C883 */
@@ -365,7 +365,7 @@ fn qone(x: f64) -> f64 {
     /*ix >= 0x40000000*/
     {
         qone_compute(qr2, qs2, x)
-    }
+    };
 }
 #[inline]
 fn qone_compute(p: [f64; 6], q: [f64; 6], x: f64) -> f64 {
