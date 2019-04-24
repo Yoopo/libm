@@ -53,7 +53,7 @@
  *         by the method mentioned above.
  *      3. Special cases: y0(0)=-inf, y0(x<0)=NaN, y0(inf)=0.
  */
-use super::{cos, fabs, sin, log, sqrt, get_high_word, get_low_word};
+use super::{cos, fabs, get_high_word, get_low_word, log, sin, sqrt};
 
 const invsqrtpi: f64 = 5.64189583547756279280e-01; /* 0x3FE20DD7, 0x50429B6D */
 const tpi: f64 = 6.36619772367581382433e-01; /* 0x3FE45F30, 0x6DC9C883 */
@@ -270,15 +270,15 @@ fn pzero(x: f64) -> f64 {
     } else if (ix >= 0x40122E8B) {
         pzero_compute(pR5, pS5, x)
     } else if (ix >= 0x4006DB6D) {
-        pzero_compute(pR3, pS3,x )
+        pzero_compute(pR3, pS3, x)
     } else
     /*ix >= 0x40000000*/
     {
-        pzero_compute(pR2, pS2,x )
+        pzero_compute(pR2, pS2, x)
     }
 }
 #[inline]
-fn pzero_compute(p: [f64; 6], q: [f64; 5], x:f64) -> f64 {
+fn pzero_compute(p: [f64; 6], q: [f64; 5], x: f64) -> f64 {
     let z = 1.0 / (x * x);
     let r = p[0] + z * (p[1] + z * (p[2] + z * (p[3] + z * (p[4] + z * p[5]))));
     let s = 1.0 + z * (q[0] + z * (q[1] + z * (q[2] + z * (q[3] + z * q[4]))));
@@ -371,17 +371,17 @@ fn qzero(x: f64) -> f64 {
     return if (ix >= 0x40200000) {
         qzero_compute(qR8, qS8, x)
     } else if (ix >= 0x40122E8B) {
-        qzero_compute(qR5, qS5,x )
+        qzero_compute(qR5, qS5, x)
     } else if (ix >= 0x4006DB6D) {
-        qzero_compute(qR3, qS3,x)
+        qzero_compute(qR3, qS3, x)
     } else
     /*ix >= 0x40000000*/
     {
-        qzero_compute(qR2, qS2,x)
+        qzero_compute(qR2, qS2, x)
     };
 }
 #[inline]
-fn qzero_compute(p: [f64; 6], q: [f64; 6], x:f64) -> f64 {
+fn qzero_compute(p: [f64; 6], q: [f64; 6], x: f64) -> f64 {
     let z = 1.0 / (x * x);
     let r = p[0] + z * (p[1] + z * (p[2] + z * (p[3] + z * (p[4] + z * p[5]))));
     let s = 1.0 + z * (q[0] + z * (q[1] + z * (q[2] + z * (q[3] + z * (q[4] + z * q[5])))));
