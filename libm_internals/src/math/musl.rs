@@ -95,6 +95,8 @@ pub mod tan;
 pub mod tanh;
 pub mod tgamma;
 pub mod trunc;
+pub mod nextafter;
+pub mod rint;
 
 #[rustfmt::skip]
 #[cfg(feature = "musl")]
@@ -209,6 +211,8 @@ pub use self::{
     tanh::tanh,
     tgamma::tgamma,
     trunc::trunc,
+    nextafter::nextafter,
+    rint::rint,
 };
 
 // Private modules

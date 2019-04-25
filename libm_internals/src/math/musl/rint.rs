@@ -15,9 +15,7 @@ pub fn rint(x: f64) -> f64 {
     let e = u >> 52 & 0x7ff;
     let s = u >> 63;
 
-    let mut y: f64 = 0.0;
-
-    if (e >= 0x3ff + 52) {
+    if e >= 0x3ff + 52 {
         return x;
     }
 

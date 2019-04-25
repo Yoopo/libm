@@ -345,8 +345,17 @@ pub extern "C" fn truncf(arg: c_float) -> c_float {
 }
 
 #[no_mangle]
+pub static mut signgam: isize = 0;
+
+#[no_mangle]
 pub extern "C" fn lgamma(arg: c_double) -> c_double {
-    libm_internals::lgamma(arg)
+    let (res, err) = libm_internals::lgamma_r(arg);
+    unsafe { signgam = err };
+    res
+}
+#[no_mangle]
+pub extern "C" fn tgamma(arg: c_double) -> c_double {
+    libm_internals::tgamma(arg)
 }
 
 #[no_mangle]
@@ -418,46 +427,88 @@ pub extern "C" fn logb(x: c_double) -> c_double {
 
 #[no_mangle]
 pub extern "C" fn j0(x: c_double) -> c_double {
-    return libm_internals::j0(x)
+    return libm_internals::j0(x);
 }
 
 #[no_mangle]
 pub extern "C" fn y0(x: c_double) -> c_double {
-    return libm_internals::y0(x)
+    return libm_internals::y0(x);
 }
 
 #[no_mangle]
 pub extern "C" fn j1(x: c_double) -> c_double {
-    return libm_internals::j1(x)
+    return libm_internals::j1(x);
 }
 
 #[no_mangle]
 pub extern "C" fn y1(x: c_double) -> c_double {
-    return libm_internals::y1(x)
+    return libm_internals::y1(x);
 }
 
 #[no_mangle]
-pub extern "C" fn jn(n: c_int,x: c_double) -> c_double {
-    return libm_internals::jn(n as u32, x)
+pub extern "C" fn jn(n: c_int, x: c_double) -> c_double {
+    return libm_internals::jn(n as isize, x);
 }
 
 #[no_mangle]
 pub extern "C" fn yn(n: c_int, x: c_double) -> c_double {
-    return libm_internals::yn(n as u32, x)
+    return libm_internals::yn(n as isize, x);
 }
 
 #[no_mangle]
-pub extern "C" fn nextafter(x: c_double,y: c_double) -> c_double {
+pub extern "C" fn nextafter(x: c_double, y: c_double) -> c_double {
     return libm_internals::nextafter(x, y);
 }
 
-
-extern "C" {
-    static signgam: c_int;
+#[no_mangle]
+pub extern "C" fn remquo(numer: c_double, denom: c_double, quot: *mut c_int) -> c_double {
+    let (res, q) = libm_internals::remquo(numer, denom);
+    unsafe {
+        *quot = q as i32;
+    }
+    res
 }
 
-pub const FP_ILOGBNAN: i32 = libm_internals::FP_ILOGBNAN;
-pub const FP_ILOGB0: i32 = libm_internals::FP_ILOGB0;
+#[no_mangle]
+pub extern "C" fn remainder(numer: c_double, denom: c_double) -> c_double {
+    libm_internals::remquo(numer, denom).0
+}
+
+// newlib test cfg ?
+#[no_mangle]
+pub extern "C" fn __isfinite(x: c_double) -> c_int {
+    if (x as f64).is_finite() {
+        1
+    } else {
+        0
+    }
+}
+#[no_mangle]
+pub extern "C" fn __isnormal(x: c_double) -> c_int {
+    if (x as f64).is_normal() {
+        1
+    } else {
+        0
+    }
+}
+#[no_mangle]
+pub extern "C" fn __fpclassifyd(x: c_double) -> c_int {
+    const FP_NORMAL: i32 = 0x4;
+    const FP_INFINITE: i32 = 0x1;
+    const FP_ZERO: i32 = 0x10;
+    const FP_SUBNORMAL: i32 = 0x8;
+    const FP_NAN: i32 = 0x2;
+
+    let u = (x as f64).to_bits();
+    let e = u >> 52 & 0x7ff;
+    if e == 0 {
+        return if u << 1 != 0 { FP_SUBNORMAL } else { FP_ZERO };
+    }
+    if e == 0x7ff {
+        return if u << 12 != 0 { FP_NAN } else { FP_INFINITE };
+    }
+    return FP_NORMAL;
+}
 
 #[cfg(test)]
 mod tests {

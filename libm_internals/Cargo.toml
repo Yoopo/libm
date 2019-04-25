@@ -9,4 +9,12 @@ name = "libm_internals"
 crate-type = ["staticlib", "lib"]
 
 
+[features]
+# only used to run our test suite
+checked = []
+newlib = []
+musl = []
+default = ['stable', 'musl']
+stable = []
+
 [dependencies]
