@@ -88,7 +88,6 @@ pub extern "C" fn fabsf(arg: c_float) -> c_float {
     libm_internals::fabsf(arg)
 }
 
-
 #[no_mangle]
 pub extern "C" fn fdimf(x: c_float, y: c_float) -> c_float {
     libm_internals::fdimf(x, y)
@@ -178,7 +177,6 @@ pub extern "C" fn sqrtf(arg: c_float) -> c_float {
 pub extern "C" fn tanf(arg: c_float) -> c_float {
     libm_internals::tanf(arg)
 }
-
 
 #[no_mangle]
 pub extern "C" fn tanhf(arg: c_float) -> c_float {
