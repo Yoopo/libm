@@ -35,6 +35,7 @@ script that monitor commit on musl an alert at compile time of deprecation
 Use unstable flag to hide untested method (cuda, ...)
 clean up feature flags to simplify modularity (musl Vs newlib with or with out intrinsic / cuda)
 test all feature combinations
+add new lib test
 
 ## Notes
 
