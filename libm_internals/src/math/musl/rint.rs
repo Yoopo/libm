@@ -7,7 +7,7 @@ const EPS: f64 = 2.2204460492503131e-16;
 // #define EPS LDBL_EPSILON
 // #endif
 
-const toint: f64 = 1.0 / EPS;
+const TOINT: f64 = 1.0 / EPS;
 
 #[inline]
 pub fn rint(x: f64) -> f64 {
@@ -20,9 +20,13 @@ pub fn rint(x: f64) -> f64 {
     }
 
     let y = if s != 0 {
-        x - toint + toint
+        x - TOINT
+     + TOINT
+    
     } else {
-        x + toint - toint
+        x + TOINT
+     - TOINT
+    
     };
     if y == 0.0 {
         return if s != 0 { -0.0 } else { 0.0 };

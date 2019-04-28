@@ -6,6 +6,17 @@ macro_rules! force_eval {
     };
 }
 
+macro_rules! llvm_intrinsically_optimized {
+    (#[cfg($($clause:tt)*)] $e:expr) => {
+        #[cfg(all(not(feature = "stable"), $($clause)*))]
+        {
+            if true { // thwart the dead code lint
+                $e
+            }
+        }
+    };
+}
+
 #[cfg(not(feature = "checked"))]
 macro_rules! i {
     ($array:expr, $index:expr) => {
@@ -55,17 +66,6 @@ macro_rules! i {
     };
     ($array:expr, $index:expr, == , $rhs:expr) => {
         *$array.get_mut($index).unwrap() == $rhs
-    };
-}
-
-macro_rules! llvm_intrinsically_optimized {
-    (#[cfg($($clause:tt)*)] $e:expr) => {
-        #[cfg(all(not(feature = "stable"), $($clause)*))]
-        {
-            if true { // thwart the dead code lint
-                $e
-            }
-        }
     };
 }
 

@@ -11,11 +11,18 @@ https://gitlab.gnome.org/GNOME/librsvg
 
 ## TODO
 
+- backport llvm intrinsic for wasm
+
+  - fork and check if rustc wasm atrget is borken
+  - https://github.com/rust-lang-nursery/compiler-builtins/pull/248
+
 use git submodules for test
+Do not compare staticlink Vs dynamic lib in bench for fair testing
+Compare static link libm Vs dynlibm (rust carte will static link our math lib it may be an argument for it)
 use docker for tests ?
 Check FLT_EVAL method as feature(rint)
 proper testing : remove path to get static lib
-make it no_std again
+make relibm no std
 restore original comment
 backport last change from musl
 continue to document change in readme or in a separate doc
@@ -24,10 +31,14 @@ backport the intrinsic cfg in rust crate (may us a cfg in lib which use intrinsi
 name the c libm relibm ?
 Use f32::EPSILON; instead of EPS ?
 backport japardic old test aka no std test
-script that monitor commit on musl an
+script that monitor commit on musl an alert at compile time of deprecation
+Use unstable flag to hide untested method (cuda, ...)
+clean up feature flags to simplify modularity (musl Vs newlib with or with out intrinsic / cuda)
+test all feature combinations
 
 ## Notes
 
+Should relibm be no std (panic handler ?) => YES
 try the relibc architecture and build
 
 Internal should use result istead of errno like
@@ -54,5 +65,15 @@ new lib may need cross compile to be tested (x86_64 not suported)
 Quick check against libm
 Proptest
 Pallette use libm for no std
+Use rust cont instead of #define LDBL_EPSILON
 
-#define LDBL_EPSILON
+Is cuda llvm.nvvm.sin.approx.f equivalent to use llvm llvm.sin.f32
+will llvm choose it on cuda target ?
+
+Check clang fast-math-flag ‘afn’
+
+- How do we enable it as feature in libm
+- https://github.com/rust-lang/rust/issues/40063
+
+libm origine ?
+https://github.com/rustwasm/team/issues/84

@@ -5,8 +5,8 @@ authors = ["augustin <cheron.augustin@gmail.com>"]
 edition = "2018"
 
 [lib]
-name = "libm"
-crate-type = ["staticlib", "cdylib"]
+name = "relibm"
+crate-type = ["staticlib", "cdylib", "dylib"]
 
 [dependencies]
 libc = { version = "0.2", default-features=false}

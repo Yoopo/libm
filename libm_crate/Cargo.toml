@@ -12,12 +12,12 @@ exclude = ["/ci/*"]
 edition = "2018"
 
 [features]
-# only used to run our test suite
-checked = []
-newlib = []
-musl = []
 default = ['stable', 'musl']
-stable = []
+newlib = ['libm_internals/newlib']
+musl = ['libm_internals/musl']
+stable = ['libm_internals/stable']
+# only used to run our test suite
+checked = ['libm_internals/checked']
 
 [dependencies]
 libm_internals = {path="../libm_internals/"}
