@@ -19,6 +19,18 @@ stable = ['libm_internals/stable']
 # only used to run our test suite
 checked = ['libm_internals/checked']
 
+[workspace]
+members = [
+  "cb",
+  "input-generator",
+  "musl-generator",
+  "newlib-generator",
+  "shared",
+]
+
+[dev-dependencies]
+shared = { path = "shared" }
+
 [dependencies]
 libm_internals = {path="../libm_internals/"}
 

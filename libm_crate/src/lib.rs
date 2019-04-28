@@ -26,9 +26,7 @@
 
 use core::{f32, f64};
 
-mod math;
-
-pub use math::*;
+pub use libm_internals::*;
 
 /// Approximate equality with 1 ULP of tolerance
 #[doc(hidden)]

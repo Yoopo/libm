@@ -1,12 +1,9 @@
-#![feature(lang_items, core_intrinsics, start)]
-
+#![feature(lang_items)]
 #![no_main]
 #![no_std]
 
-extern crate libc;
 extern crate libm;
 
-use core::intrinsics;
 use core::panic::PanicInfo;
 use core::ptr;
 
@@ -93,13 +90,25 @@ where
     }
 }
 
-#[lang = "eh_personality"]
-fn eh_personality() {}
+#[panic_handler]
+#[no_mangle]
+pub fn panic(_info: &PanicInfo) -> ! {
+    // loop {}
+    extern "C" {
+        fn thou_shalt_not_panic() -> !;
+    }
 
-#[lang = "eh_unwind_resume"]
-fn rust_eh_unwind_resume() {}
-
-#[lang = "panic_impl"]
-fn rust_begin_panic(_info: &PanicInfo) -> ! {
-    unsafe { intrinsics::abort() }
+    unsafe { thou_shalt_not_panic() }
 }
+
+#[link(name = "c")]
+extern "C" {}
+
+#[lang = "eh_personality"]
+fn eh() {}
+
+#[no_mangle]
+pub extern "C" fn __aeabi_unwind_cpp_pr0() {}
+
+#[no_mangle]
+pub extern "C" fn __aeabi_unwind_cpp_pr1() {}
