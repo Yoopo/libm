@@ -8,14 +8,14 @@ set -o nounset
 SCRIPT_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 REPO_DIR="${SCRIPT_DIR}/openlibm/"
 TEST_DIR="${REPO_DIR}/test"
-CRATE_RELEASE_DIR="${CARGO_TARGET_DIR:-${SCRIPT_DIR}/..}/release/"
+CRATE_RELEASE_DIR="${CARGO_TARGET_DIR:-SCRIPT_DIR/..}/release/"
 
 # clone and adapt test to be build against relibm
 if [ ! -d "${REPO_DIR}" ]; then
   cd ${SCRIPT_DIR}
     git clone https://github.com/JuliaMath/openlibm.git
     cd ${TEST_DIR}
-        sed -i 's#OPENLIBM_LIB = -L.. -lopenlibm#OPENLIBM_LIB = -lpthread -ldl -L ${SCRIPT_DIR} -lrelibm -Wl,-rpath=/home/augustin/.cache/cargo/release/#' Makefile
+        sed -i "s#OPENLIBM_LIB = -L.. -lopenlibm#OPENLIBM_LIB = -lpthread -ldl -L ${CRATE_RELEASE_DIR} -lrelibm -Wl,-rpath=/home/augustin/.cache/cargo/release/#" Makefile
     cd -
   cd -
 fi
