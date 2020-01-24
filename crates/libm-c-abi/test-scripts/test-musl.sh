@@ -7,15 +7,21 @@ set -o nounset
 
 SCRIPT_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 REPO_DIR="${SCRIPT_DIR}/libc-test/"
-CRATE_RELEASE_DIR="${CARGO_TARGET_DIR:-${SCRIPT_DIR}/..}/release/"
+CRATE_RELEASE_DIR="${CARGO_TARGET_DIR:-${SCRIPT_DIR}/../}release/"
 
 if [ ! -d "${REPO_DIR}" ]; then
   cd ${SCRIPT_DIR}
     git clone git://nsz.repo.hu:45100/repo/libc-test
     cd ${REPO_DIR}
-        
-        echo "LDLIBS += -L ${CRATE_RELEASE_DIR}/release -lrelibm -Wl,-rpath=${CRATE_RELEASE_DIR}" | \
-            cat config.mak.def - > config.mak
+      cat << EOF > config.mak
+CFLAGS += -pipe -std=c99 -D_POSIX_C_SOURCE=200809L -Wall -Wno-unused-function -Wno-missing-braces -Wno-unused -Wno-overflow
+CFLAGS += -Wno-unknown-pragmas -fno-builtin -frounding-math
+CFLAGS += -Werror=implicit-function-declaration -Werror=implicit-int -Werror=pointer-sign -Werror=pointer-arith
+CFLAGS += -g
+LDFLAGS += -g
+LDLIBS += -lpthread -lrt
+LDLIBS += -L ${CRATE_RELEASE_DIR} -lrelibm -Wl,-rpath=${CRATE_RELEASE_DIR}
+EOF
     cd -
   cd -
 fi
@@ -24,6 +30,7 @@ fi
 cargo build --release
 echo [+] Run musl test suite
 cd ${REPO_DIR}
-    make
-    #cat math/REPORT
+    make -s clean && make -s
+    echo "[+] libc-test result for math"
+    cat src/math/REPORT | grep -v exception | grep -v l\.h: | grep X
 cd -
