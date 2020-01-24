@@ -24,6 +24,7 @@ most ideas and constants are from boost and python
 */
 extern crate core;
 use super::{exp, floor, k_cos, k_sin, pow};
+use core::f64;
 
 const PI: f64 = 3.141592653589793238462643383279502884;
 
@@ -154,7 +155,7 @@ pub fn tgamma(mut x: f64) -> f64 {
     /* raise inexact when non-integer */
     if x == floor(x) {
         if sign {
-            return 0.0 / 0.0;
+            return f64::NAN;
         }
         if x <= FACT.len() as f64 {
             return FACT[(x as usize) - 1];

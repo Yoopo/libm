@@ -345,7 +345,7 @@ pub(crate) fn rem_pio2_large(x: &[f64], y: &mut [f64], e0: i32, prec: usize) -> 
         /* check if recomputation is needed */
         if z == 0. {
             let mut j = 0;
-            for i in (jk..=jz - 1).rev() {
+            for i in (jk..jz).rev() {
                 j |= i!(iq, i);
             }
             if j == 0 {

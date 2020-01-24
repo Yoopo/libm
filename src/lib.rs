@@ -5,6 +5,7 @@
     all(target_arch = "wasm32", feature = "unstable"),
     feature(core_intrinsics)
 )]
+#![allow(clippy::excessive_precision)]
 #![allow(clippy::unreadable_literal)]
 #![allow(clippy::many_single_char_names)]
 #![allow(clippy::needless_return)]

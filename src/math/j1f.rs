@@ -14,6 +14,7 @@
  */
 
 use super::{cosf, fabsf, logf, sinf, sqrtf};
+use core::f32; 
 
 const INVSQRTPI: f32 = 5.6418961287e-01; /* 0x3f106ebb */
 const TPI: f32 = 6.3661974669e-01; /* 0x3f22f983 */
@@ -118,7 +119,7 @@ pub fn y1f(x: f32) -> f32 {
         return -1.0 / 0.0;
     }
     if (ix >> 31) != 0 {
-        return 0.0 / 0.0;
+        return f32::NAN;
     }
     if ix >= 0x7f800000 {
         return 1.0 / x;
@@ -233,9 +234,8 @@ fn ponef(x: f32) -> f32 {
     } else if ix >= 0x4036d917 {
         p = &PR3;
         q = &PS3;
-    } else
-    /*ix >= 0x40000000*/
-    {
+    } else { /*ix >= 0x40000000*/
+    
         p = &PR2;
         q = &PS2;
     }
@@ -345,9 +345,8 @@ fn qonef(x: f32) -> f32 {
     } else if ix >= 0x4036d917 {
         p = &QR3;
         q = &QS3;
-    } else
-    /*ix >= 0x40000000*/
-    {
+    } else { /*ix >= 0x40000000*/
+    
         p = &QR2;
         q = &QS2;
     }

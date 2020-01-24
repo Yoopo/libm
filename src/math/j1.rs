@@ -289,9 +289,7 @@ fn pone(x: f64) -> f64 {
     } else if ix >= 0x4006DB6D {
         p = &PR3;
         q = &PS3;
-    } else
-    /*ix >= 0x40000000*/
-    {
+    } else { /*ix >= 0x40000000*/
         p = &PR2;
         q = &PS2;
     }
@@ -401,9 +399,8 @@ fn qone(x: f64) -> f64 {
     } else if ix >= 0x4006DB6D {
         p = &QR3;
         q = &QS3;
-    } else
-    /*ix >= 0x40000000*/
-    {
+    } else { /*ix >= 0x40000000*/
+    
         p = &QR2;
         q = &QS2;
     }

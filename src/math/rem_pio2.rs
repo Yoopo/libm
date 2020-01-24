@@ -166,9 +166,9 @@ pub(crate) fn rem_pio2(x: f64) -> (i32, f64, f64) {
     ui |= (0x3ff + 23) << 52;
     let mut z = f64::from_bits(ui);
     let mut tx = [0.0; 3];
-    for i in 0..2 {
-        tx[i] = z as i32 as f64;
-        z = (z - tx[i]) * x1p24;
+    for tx_i in tx.iter_mut().take(2) {
+        *tx_i = z as i32 as f64;
+        z = (z - *tx_i) * x1p24;
     }
     tx[2] = z;
     /* skip zero terms, first term is non-zero */

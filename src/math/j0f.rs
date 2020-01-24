@@ -234,9 +234,8 @@ fn pzerof(x: f32) -> f32 {
     } else if ix >= 0x4036d917 {
         p = &PR3;
         q = &PS3;
-    } else
-    /*ix >= 0x40000000*/
-    {
+    } else {
+        /*ix >= 0x40000000*/
         p = &PR2;
         q = &PS2;
     }
@@ -346,9 +345,7 @@ fn qzerof(x: f32) -> f32 {
     } else if ix >= 0x4036d917 {
         p = &QR3;
         q = &QS3;
-    } else
-    /*ix >= 0x40000000*/
-    {
+    } else { /*ix >= 0x40000000*/
         p = &QR2;
         q = &QS2;
     }

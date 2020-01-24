@@ -117,8 +117,7 @@ pub fn jn(n: i32, mut x: f64) -> f64 {
                 a = temp;
             }
         }
-    } else {
-        if ix < 0x3e100000 {
+    } else if ix < 0x3e100000 {
             /* x < 2**-29 */
             /* x is tiny, return the first Taylor expansion of J(n,x)
              * J(n,x) = 1/n!*(x/2)^n  - ...
@@ -241,8 +240,7 @@ pub fn jn(n: i32, mut x: f64) -> f64 {
             } else {
                 b = t * w / a;
             }
-        }
-    }
+            }
 
     if sign {
         -b
@@ -274,7 +272,7 @@ pub fn yn(n: i32, x: f64) -> f64 {
     }
     if sign && (ix | lx) != 0 {
         /* x < 0 */
-        return 0.0 / 0.0;
+        return core::f64::NAN;
     }
     if ix == 0x7ff00000 {
         return 0.0;
