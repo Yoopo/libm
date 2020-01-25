@@ -418,3 +418,15 @@ fn qzero(x: f64) -> f64 {
     s = 1.0 + z * (q[0] + z * (q[1] + z * (q[2] + z * (q[3] + z * (q[4] + z * q[5])))));
     return (-0.125 + r / s) / x;
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_musl_01() {
+        let x = f64::from_bits(0x3fec982eb8d417ea); // 0x1.c982eb8d417eap-1
+        let want = f64::from_bits(0x3c7af74bfa0f1304); // 0x1.af74bfa0f1304p-56;
+        assert_eq!(y0(x), want);
+    }
+}
