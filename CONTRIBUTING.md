@@ -43,32 +43,21 @@ Check [PR #65] for an example.
   was renamed to `k_sin` after the FreeBSD source code naming. Do `use` these private functions in
   `mod.rs`.
 
-- You may encounter weird literals like `0x1p127f` in the MUSL code. These are hexadecimal floating
+- You may encounter weird literals like `0x1.0p127f` in the MUSL code. These are hexadecimal floating
   point literals. Rust (the language) doesn't support these kind of literals. The best way I have
   found to deal with these literals is to turn them into their integer representation using the
   [`hexf!`] macro and then turn them back into floats. See below:
 
-[`hexf!`]: https://crates.io/crates/hexf
-
-``` rust
-// Step 1: write a program to convert the float into its integer representation
-#[macro_use]
-extern crate hexf;
-
-fn main() {
-    println!("{:#x}", hexf32!("0x1.0p127").to_bits());
-}
-```
 
 ``` console
-$ # Step 2: run the program
-$ cargo run
+$ # Step 1: run the program
+$ cargo run -p hexf-cli -- 0x1.0p127f
 0x7f000000
 ```
 
 ``` rust
-// Step 3: copy paste the output into libm
-let x1p127 = f32::from_bits(0x7f000000); // 0x1p127f === 2 ^ 12
+// Step 2: copy paste the output into libm
+let x1p127 = f32::from_bits(0x7f000000); // 0x1.0p127f === 2 ^ 12
 ```
 
 - Rust code panics on arithmetic overflows when not optimized. You may need to use the [`Wrapping`]
