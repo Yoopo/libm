@@ -2,7 +2,9 @@
 name = "relibm"
 version = "0.1.0"
 authors = ["augustin <cheron.augustin@gmail.com>"]
+description = "Expose rust libm function in a c abi compatible lib. This is highly experimental, use it only for test purpose"
 edition = "2018"
+license = "MIT OR Apache-2.0"
 
 [lib]
 crate-type = ["staticlib", "cdylib"]

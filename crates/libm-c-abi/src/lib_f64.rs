@@ -315,7 +315,7 @@ pub extern "C" fn remainder(numer: c_double, denom: c_double) -> c_double {
     libm::remquo(numer, denom).0
 }
 
-// newlib test cfg ?
+// todo : add a newlib test cfg feature flag?
 #[no_mangle]
 pub extern "C" fn __isfinite(x: c_double) -> c_int {
     if (x as f64).is_finite() {

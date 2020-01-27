@@ -293,7 +293,7 @@ pub extern "C" fn remainderl(numer: c_double, denom: c_double) -> c_double {
     unimplemented!()
 }
 
-// newlib test cfg ?
+// todo : add a newlib test cfg feature flag?
 #[no_mangle]
 pub extern "C" fn __isfinitel(x: c_double) -> c_int {
     unimplemented!()

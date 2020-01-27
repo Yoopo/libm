@@ -314,7 +314,7 @@ pub extern "C" fn remainderf(numer: c_float, denom: c_float) -> c_float {
     libm::remquof(numer, denom).0
 }
 
-// newlib test cfg ?
+// todo : add a newlib test cfg feature flag?
 #[no_mangle]
 pub extern "C" fn __isfinitef(x: c_float) -> c_int {
     if (x as f32).is_finite() {
@@ -332,13 +332,7 @@ pub extern "C" fn __isnormalf(x: c_float) -> c_int {
     }
 }
 
-// fixme
 #[no_mangle]
 pub extern "C" fn __fpclassifyf(x: c_float) -> c_int {
-    const FP_NORMAL: i32 = 0x4;
-    const FP_INFINITE: i32 = 0x1;
-    const FP_ZERO: i32 = 0x10;
-    const FP_SUBNORMAL: i32 = 0x8;
-    const FP_NAN: i32 = 0x2;
-    return FP_NORMAL;
+    unimplemented!()
 }
