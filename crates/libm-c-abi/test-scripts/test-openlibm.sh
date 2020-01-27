@@ -8,7 +8,7 @@ set -o nounset
 SCRIPT_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 REPO_DIR="${SCRIPT_DIR}/openlibm/"
 TEST_DIR="${REPO_DIR}/test"
-CRATE_RELEASE_DIR="${CARGO_TARGET_DIR:-${SCRIPT_DIR}/..}/release/"
+CRATE_RELEASE_DIR="${CARGO_TARGET_DIR:-${SCRIPT_DIR}/../../../target/}release/"
 
 if [ ! -d "${REPO_DIR}" ]; then
   cd ${SCRIPT_DIR}

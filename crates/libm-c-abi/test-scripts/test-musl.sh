@@ -7,7 +7,7 @@ set -o nounset
 
 SCRIPT_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 REPO_DIR="${SCRIPT_DIR}/libc-test/"
-CRATE_RELEASE_DIR="${CARGO_TARGET_DIR:-${SCRIPT_DIR}/../}release/"
+CRATE_RELEASE_DIR="${CARGO_TARGET_DIR:-${SCRIPT_DIR}/../../../target/}release/"
 
 if [ ! -d "${REPO_DIR}" ]; then
   cd ${SCRIPT_DIR}
@@ -29,8 +29,8 @@ fi
 # make sure we have a library test
 cargo build --release
 echo [+] Run musl test suite
-cd ${REPO_DIR}
-    make -s clean && make -s
+cd ${REPO_DIR}/src/math
+    make clean && make
     echo "[+] libc-test result for math"
-    cat src/math/REPORT | grep -v exception | grep -v l\.h: | grep X
+    cat REPORT | grep -v exception | grep -v l\.h | grep X
 cd -
