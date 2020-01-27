@@ -30,7 +30,7 @@ fi
 cargo build --release
 echo [+] Run musl test suite
 cd ${REPO_DIR}/src/math
-    make clean && make
+    make clean -s && make -s
     echo "[+] libc-test result for math"
     cat REPORT | grep -v exception | grep -v l\.h | grep X
 cd -

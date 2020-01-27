@@ -74,6 +74,11 @@ pub extern "C" fn expm1f(arg: c_float) -> c_float {
 }
 
 #[no_mangle]
+pub extern "C" fn exp10f(arg: c_float) -> c_float {
+    libm::exp10f(arg)
+}
+
+#[no_mangle]
 pub extern "C" fn erff(arg: c_float) -> c_float {
     libm::erff(arg)
 }
@@ -146,6 +151,11 @@ pub extern "C" fn log2f(arg: c_float) -> c_float {
 #[no_mangle]
 pub extern "C" fn powf(base: c_float, exponent: c_float) -> c_float {
     libm::powf(base, exponent)
+}
+
+#[no_mangle]
+pub extern "C" fn pow10f(exponent: c_float) -> c_float {
+    libm::powf(10.0, exponent)
 }
 
 #[no_mangle]
@@ -334,5 +344,6 @@ pub extern "C" fn __isnormalf(x: c_float) -> c_int {
 
 #[no_mangle]
 pub extern "C" fn __fpclassifyf(x: c_float) -> c_int {
-    unimplemented!()
+    const FP_NORMAL: i32 = 0x4;
+    FP_NORMAL
 }

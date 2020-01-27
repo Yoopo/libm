@@ -74,6 +74,11 @@ pub extern "C" fn expm1l(arg: c_double) -> c_double {
 }
 
 #[no_mangle]
+pub extern "C" fn exp10l(arg: c_double) -> c_double {
+    unimplemented!()
+}
+
+#[no_mangle]
 pub extern "C" fn erfl(arg: c_double) -> c_double {
     unimplemented!()
 }
@@ -145,6 +150,11 @@ pub extern "C" fn log2l(arg: c_double) -> c_double {
 
 #[no_mangle]
 pub extern "C" fn powl(base: c_double, exponent: c_double) -> c_double {
+    unimplemented!()
+}
+
+#[no_mangle]
+pub extern "C" fn pow10l(exponent: c_double) -> c_double {
     unimplemented!()
 }
 

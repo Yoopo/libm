@@ -74,6 +74,11 @@ pub extern "C" fn expm1(arg: c_double) -> c_double {
 }
 
 #[no_mangle]
+pub extern "C" fn exp10(arg: c_double) -> c_double {
+    libm::exp10(arg)
+}
+
+#[no_mangle]
 pub extern "C" fn erf(arg: c_double) -> c_double {
     libm::erf(arg)
 }
@@ -146,6 +151,11 @@ pub extern "C" fn log2(arg: c_double) -> c_double {
 #[no_mangle]
 pub extern "C" fn pow(base: c_double, exponent: c_double) -> c_double {
     libm::pow(base, exponent)
+}
+
+#[no_mangle]
+pub extern "C" fn pow10(exponent: c_double) -> c_double {
+    libm::pow(10.0, exponent)
 }
 
 #[no_mangle]

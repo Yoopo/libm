@@ -12,17 +12,17 @@ pub struct fenv_t {
 
 #[no_mangle]
 pub extern "C" fn feclearexcept(_mask: c_int) -> c_int {
-    unimplemented!()
+    0
 }
 
 #[no_mangle]
 pub extern "C" fn feraiseexcept(_mask: c_int) -> c_int {
-    unimplemented!()
+    0
 }
 
 #[no_mangle]
 pub extern "C" fn fetestexcept(_mask: c_int) -> c_int {
-    unimplemented!()
+    0
 }
 
 #[no_mangle]
@@ -32,17 +32,17 @@ pub extern "C" fn fegetround() -> c_int {
 
 #[no_mangle]
 extern "C" fn __fesetround(_r: c_int) -> c_int {
-    unimplemented!()
+    0
 }
 
 #[no_mangle]
 pub extern "C" fn fegetenv(envp: *const fenv_t) -> c_int {
-    unimplemented!()
+    0
 }
 
 #[no_mangle]
 pub extern "C" fn fesetenv(envp: *const fenv_t) -> c_int {
-    unimplemented!()
+    0
 }
 
 #[no_mangle]
