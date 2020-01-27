@@ -5,7 +5,7 @@ ifndef CARGO_TARGET_DIR
 override CARGO_TARGET_DIR = "../"
 endif
 CRATE_RELEASE_DIR := $(CARGO_TARGET_DIR)release
-LDLIBS += -L ${}/home/augustin/.cache/cargo/release -lrelibm -Wl,-rpath=/home/augustin/.cache/cargo/release/
+LDLIBS += -L $(CRATE_RELEASE_DIR) -lrelibm -Wl,-rpath=$(CRATE_RELEASE_DIR)
 
 all: shared
 
